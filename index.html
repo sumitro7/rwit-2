@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Some Memories Never Really Fade — A Digital Keepsake</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Editorial Serif) & Plus Jakarta Sans (Clean Modern Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & PALETTE
+       ========================================================================== */
+    :root {
+      --bg-cream: #FAF7F2;
+      --bg-blush: #F6E7E8;
+      --bg-lavender: #EBE6F2;
+      --bg-peach: #FCEEE6;
+      --card-surface: #FFFFFF;
+      --ink-primary: #2E2A2B;
+      --ink-secondary: #574F50;
+      --ink-muted: #6E6566;
+      --accent-rose: #D9A7A9;
+      --accent-gold: #C8A97E;
+      --hairline: rgba(46, 42, 43, 0.1);
+      --shadow-soft: 0 22px 50px -14px rgba(64, 48, 50, 0.12), 0 8px 20px -8px rgba(64, 48, 50, 0.06);
+      --shadow-hover: 0 30px 64px -14px rgba(64, 48, 50, 0.18), 0 12px 28px -8px rgba(64, 48, 50, 0.09);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-cream);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--ink-primary);
+      overflow-x: hidden;
+      width: 100%;
+      line-height: 1.65;
+    }
+
+    /* Subtle paper-grain texture overlay for tactile memory book warmth */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 90;
+      opacity: 0.025;
+      background-image: radial-gradient(#2E2A2B 0.75px, transparent 0.75px);
+      background-size: 24px 24px;
+    }
+
+    /* ==========================================================================
+       IST TIME-LOCK OVERLAY (ACCESSIBLE AT 3:10 AM IST, 23 NOV 2026)
+       ========================================================================== */
+    body.is-time-locked {
+      overflow: hidden !important;
+      height: 100svh;
+    }
+
+    body.is-time-locked #readingProgress,
+    body.is-time-locked #top,
+    body.is-time-locked #memory-journey,
+    body.is-time-locked #closingSection {
+      display: none !important;
+    }
+
+    .timelock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      min-height: 100svh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 22%, rgba(246, 231, 232, 0.92) 0%, transparent 52%),
+        radial-gradient(circle at 80% 28%, rgba(235, 230, 242, 0.88) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(252, 238, 230, 0.95) 0%, transparent 58%),
+        var(--bg-cream);
+      transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.85s ease;
+    }
+
+    .timelock-screen.is-unlocked {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .timelock-card {
+      position: relative;
+      z-index: 2;
+      max-width: 580px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timelock-kicker {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .timelock-kicker .ornament {
+      color: var(--accent-gold);
+    }
+
+    .timelock-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.15rem, 5.5vw, 3.65rem);
+      font-weight: 400;
+      line-height: 1.16;
+      color: var(--ink-primary);
+      margin-bottom: 1rem;
+    }
+
+    .timelock-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: #5A4749;
+    }
+
+    .timelock-note {
+      font-family: var(--font-sans);
+      font-size: clamp(0.92rem, 2vw, 1.04rem);
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--ink-secondary);
+      max-width: 470px;
+      margin-bottom: 2.15rem;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(64px, 92px));
+      gap: clamp(0.65rem, 2.5vw, 1.1rem);
+      margin-bottom: 1.9rem;
+    }
+
+    .countdown-box {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(217, 167, 169, 0.42);
+      border-radius: 16px;
+      padding: 1rem 0.5rem 0.9rem;
+      box-shadow: 0 14px 32px -10px rgba(173, 128, 132, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .countdown-value {
+      font-family: var(--font-serif);
+      font-size: clamp(1.85rem, 4.5vw, 2.65rem);
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--ink-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .countdown-label {
+      margin-top: 0.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .timelock-target-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.35rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(200, 169, 126, 0.35);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--ink-secondary);
+      letter-spacing: 0.03em;
+    }
+
+    .timelock-target-badge span.dot-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-rose);
+      box-shadow: 0 0 8px var(--accent-rose);
+      animation: softPulse 2s ease-in-out infinite;
+    }
+
+    /* ==========================================================================
+       READING PROGRESS BAR (TOP HAIRLINE)
+       ========================================================================== */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2.5px;
+      width: 0%;
+      background: linear-gradient(90deg, #E8B8BA, #CBB9E2, #E6C19C);
+      z-index: 100;
+      transition: width 0.15s ease-out;
+    }
+
+    /* ==========================================================================
+       SECTION 1: OPENING SCREEN ("WELCOME TO OUR MEMORIES")
+       ========================================================================== */
+    .hero-section {
+      position: relative;
+      min-height: 100svh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(246, 231, 232, 0.9) 0%, transparent 52%),
+        radial-gradient(circle at 82% 28%, rgba(235, 230, 242, 0.85) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(252, 238, 230, 0.95) 0%, transparent 58%),
+        var(--bg-cream);
+    }
+
+    /* Ambient glowing bokeh orbs */
+    .bokeh-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(55px);
+      pointer-events: none;
+      opacity: 0.65;
+      animation: floatOrb 14s ease-in-out infinite alternate;
+    }
+
+    .bokeh-orb-1 {
+      width: clamp(220px, 35vw, 420px);
+      height: clamp(220px, 35vw, 420px);
+      background: rgba(246, 214, 217, 0.55);
+      top: 8%;
+      left: -6%;
+      animation-delay: 0s;
+    }
+
+    .bokeh-orb-2 {
+      width: clamp(200px, 32vw, 380px);
+      height: clamp(200px, 32vw, 380px);
+      background: rgba(226, 218, 240, 0.55);
+      bottom: 12%;
+      right: -5%;
+      animation-delay: -4s;
+    }
+
+    .bokeh-orb-3 {
+      width: clamp(180px, 26vw, 300px);
+      height: clamp(180px, 26vw, 300px);
+      background: rgba(252, 229, 212, 0.6);
+      top: 48%;
+      left: 55%;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(24px, -28px, 0) scale(1.08);
+      }
+    }
+
+    /* Particle layer */
+    .particle-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: driftStar var(--dur, 12s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: 0;
+    }
+
+    .star-particle.sparkle {
+      background: transparent;
+      border-radius: 0;
+    }
+
+    .star-particle.sparkle::before {
+      content: "✦";
+      font-size: var(--size, 11px);
+      color: var(--color, rgba(200, 169, 126, 0.65));
+      display: block;
+      text-shadow: 0 0 10px rgba(200, 169, 126, 0.45);
+    }
+
+    .star-particle.dot {
+      width: var(--size, 4px);
+      height: var(--size, 4px);
+      background: var(--color, rgba(217, 167, 169, 0.6));
+      box-shadow: 0 0 12px var(--color, rgba(217, 167, 169, 0.65));
+    }
+
+    @keyframes driftStar {
+      0% {
+        transform: translateY(15px) scale(0.8);
+        opacity: 0;
+      }
+      25% {
+        opacity: var(--max-opacity, 0.75);
+      }
+      75% {
+        opacity: var(--max-opacity, 0.75);
+      }
+      100% {
+        transform: translateY(-45px) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+    }
+
+    .hero-kicker span.ornament {
+      color: var(--accent-gold);
+      font-size: 0.85rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 6.2vw, 4.45rem);
+      font-weight: 400;
+      line-height: 1.13;
+      letter-spacing: -0.015em;
+      color: var(--ink-primary);
+      margin-bottom: 1.5rem;
+      text-shadow: 0 8px 32px rgba(217, 167, 169, 0.22);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: #5A4749;
+    }
+
+    .hero-divider {
+      width: 56px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: heroReveal 1s ease 0.55s forwards;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-sans);
+      font-size: clamp(0.98rem, 2.2vw, 1.12rem);
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--ink-secondary);
+      max-width: 560px;
+      margin-bottom: 2.6rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.65s forwards;
+    }
+
+    .explore-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.95rem 2.1rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(217, 167, 169, 0.45);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 12px 30px -8px rgba(173, 128, 132, 0.25);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease,
+                  background-color 0.35s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroReveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+    }
+
+    .explore-btn:hover {
+      background: #FFFFFF;
+      transform: translateY(-3px);
+      box-shadow: 0 18px 36px -8px rgba(173, 128, 132, 0.34);
+    }
+
+    .explore-btn:active {
+      transform: scale(0.97);
+    }
+
+    .explore-btn .arrow-icon {
+      display: inline-block;
+      transition: transform 0.35s ease;
+      animation: gentleBounce 2.4s ease-in-out infinite;
+    }
+
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    @keyframes heroReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Soft bottom fade transitioning hero into warm cream story canvas */
+    .hero-bottom-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 110px;
+      background: linear-gradient(to bottom, transparent, var(--bg-cream));
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       SECTION 2: EDITORIAL MEMORY COLLECTION
+       ========================================================================== */
+    .story-section {
+      position: relative;
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 4.5rem 1.25rem 6rem;
+    }
+
+    .story-intro-marker {
+      text-align: center;
+      margin-bottom: 4.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .story-intro-marker span {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--ink-muted);
+    }
+
+    .story-intro-line {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--accent-rose), transparent);
+    }
+
+    /* Subtle central editorial thread visible on wider screens */
+    .memory-stream {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(4.25rem, 9vw, 7.5rem);
+      width: 100%;
+    }
+
+    @media (min-width: 820px) {
+      .memory-stream::before {
+        content: "";
+        position: absolute;
+        top: 1rem;
+        bottom: 1rem;
+        left: 50%;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(217, 167, 169, 0.28) 10%,
+          rgba(217, 167, 169, 0.28) 90%,
+          transparent
+        );
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+    }
+
+    /* Individual Memory Entry Wrapper */
+    .memory-entry {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transition:
+        opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
+    /* Alternating Left & Right Alignment — Mobile First */
+    .memory-entry.align-left {
+      align-items: flex-start;
+      padding-right: 1.5rem;
+      transform: translate3d(-18px, 32px, 0);
+    }
+
+    .memory-entry.align-right {
+      align-items: flex-end;
+      padding-left: 1.5rem;
+      transform: translate3d(18px, 32px, 0);
+    }
+
+    /* Alternating Left & Right Alignment — Tablet & Desktop */
+    @media (min-width: 768px) {
+      .memory-entry.align-left {
+        padding-right: 0;
+        padding-left: 3%;
+        transform: translate3d(-28px, 36px, 0);
+      }
+
+      .memory-entry.align-right {
+        padding-left: 0;
+        padding-right: 3%;
+        transform: translate3d(28px, 36px, 0);
+      }
+    }
+
+    @media (min-width: 960px) {
+      .memory-entry.align-left {
+        padding-left: 5%;
+      }
+
+      .memory-entry.align-right {
+        padding-right: 5%;
+      }
+    }
+
+    /* Revealed State via Intersection Observer */
+    .memory-entry.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* Memory Card Container (adapts dynamically to image orientation) */
+    .memory-card {
+      width: 100%;
+      /* Default responsive constraint before natural aspect ratio refines it */
+      max-width: min(88vw, 460px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Aspect-ratio adaptive max-widths on desktop/tablet */
+    @media (min-width: 640px) {
+      .memory-card.is-portrait {
+        max-width: 410px;
+      }
+
+      .memory-card.is-landscape {
+        max-width: 560px;
+      }
+
+      .memory-card.is-square {
+        max-width: 465px;
+      }
+    }
+
+    /* Photograph Frame */
+    .photo-frame {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background-color: var(--card-surface);
+      padding: 8px;
+      box-shadow: var(--shadow-soft);
+      cursor: zoom-in;
+      transition:
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 640px) {
+      .photo-frame {
+        padding: 10px;
+        border-radius: 16px;
+      }
+    }
+
+    @media (hover: hover) {
+      .photo-frame:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .photo-frame:hover .memory-photo {
+        transform: scale(1.022);
+      }
+
+      .photo-frame:hover .expand-hint {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .photo-frame:active {
+      transform: scale(0.985);
+    }
+
+    /* Inner image wrapper to prevent layout shifts while loading */
+    .photo-inner {
+      position: relative;
+      width: 100%;
+      border-radius: 9px;
+      overflow: hidden;
+      background: linear-gradient(120deg, #F5EFEA 30%, #FAF6F2 50%, #F5EFEA 70%);
+      background-size: 200% 100%;
+      animation: shimmerSkeleton 1.8s ease-in-out infinite;
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-inner.loaded {
+      animation: none;
+      background: transparent;
+      min-height: 0;
+    }
+
+    @keyframes shimmerSkeleton {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Actual Photograph: Preserves exact aspect ratio, never stretched or cropped */
+    .memory-photo {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 9px;
+      opacity: 0;
+      transform: scale(1.035);
+      transition:
+        opacity 0.85s ease,
+        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .memory-entry.is-visible .memory-photo.img-ready {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Subtle expand badge on hover */
+    .expand-hint {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-primary);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Graceful fallback if a photo fails to load */
+    .photo-fallback {
+      width: 100%;
+      padding: 3.25rem 1.75rem;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--bg-blush), var(--bg-lavender));
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      color: var(--ink-secondary);
+    }
+
+    .photo-fallback-icon {
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+    }
+
+    .photo-fallback-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
+    }
+
+    /* Caption Block Directly Underneath Each Photograph */
+    .memory-caption-box {
+      margin-top: 1.15rem;
+      padding: 0 0.35rem;
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s,
+        transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s;
+    }
+
+    .memory-entry.is-visible .memory-caption-box {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .memory-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .memory-index {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.98rem;
+      letter-spacing: 0.06em;
+      color: var(--accent-gold);
+    }
+
+    .memory-meta-line {
+      width: 24px;
+      height: 1px;
+      background-color: rgba(200, 169, 126, 0.45);
+    }
+
+    .memory-message {
+      font-family: var(--font-sans);
+      font-size: clamp(0.93rem, 2vw, 1.02rem);
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--ink-secondary);
+      letter-spacing: 0.005em;
+    }
+
+    /* ==========================================================================
+       SECTION 3: FINAL CLOSING SECTION ("A BEAUTIFUL ENDING")
+       ========================================================================== */
+    .closing-section {
+      position: relative;
+      min-height: 82svh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 5rem;
+      overflow: hidden;
+      background:
+        linear-gradient(to bottom, var(--bg-cream) 0%, transparent 18%),
+        radial-gradient(circle at 25% 40%, rgba(246, 231, 232, 0.85) 0%, transparent 55%),
+        radial-gradient(circle at 75% 60%, rgba(235, 230, 242, 0.85) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, rgba(252, 238, 230, 0.9) 0%, transparent 60%),
+        var(--bg-cream);
+    }
+
+    .closing-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(28px);
+      transition:
+        opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .closing-content.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .closing-ornament {
+      font-size: 1.15rem;
+      color: var(--accent-gold);
+      letter-spacing: 0.35em;
+      margin-bottom: 1.5rem;
+    }
+
+    .closing-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 400;
+      line-height: 1.22;
+      color: var(--ink-primary);
+      margin-bottom: 1.4rem;
+    }
+
+    .closing-body {
+      font-family: var(--font-sans);
+      font-size: clamp(0.96rem, 2.1vw, 1.08rem);
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--ink-secondary);
+      margin-bottom: 0.9rem;
+      max-width: 510px;
+    }
+
+    .closing-gratitude {
+      font-family: var(--font-sans);
+      font-size: 0.98rem;
+      font-weight: 400;
+      color: var(--ink-muted);
+      margin-bottom: 2.2rem;
+    }
+
+    .closing-divider {
+      width: 64px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+      margin-bottom: 2rem;
+    }
+
+    .closing-signature {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.5rem, 3.8vw, 2.1rem);
+      font-weight: 400;
+      color: var(--ink-primary);
+      margin-bottom: 3rem;
+      text-shadow: 0 4px 20px rgba(217, 167, 169, 0.3);
+    }
+
+    .closing-signature .heart-pulse {
+      display: inline-block;
+      color: #C98287;
+      animation: softPulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes softPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.16); }
+    }
+
+    .back-to-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(46, 42, 43, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .back-to-top:hover {
+      background: #FFFFFF;
+      color: var(--ink-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ==========================================================================
+       FULL-SCREEN LIGHTBOX & ZOOM MODAL
+       ========================================================================== */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(28, 24, 25, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .lightbox-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.1rem 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 210;
+      pointer-events: none;
+    }
+
+    .lightbox-counter {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.78);
+      letter-spacing: 0.06em;
+      pointer-events: auto;
+    }
+
+    .lightbox-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      pointer-events: auto;
+    }
+
+    .lb-icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .lb-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: scale(1.06);
+    }
+
+    .lb-icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Navigation Arrows */
+    .lb-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 210;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .lb-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .lb-prev {
+      left: 1rem;
+    }
+
+    .lb-next {
+      right: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .lb-nav-btn {
+        width: 38px;
+        height: 38px;
+        top: auto;
+        bottom: 6.2rem;
+        transform: none;
+      }
+      .lb-prev { left: 1.25rem; }
+      .lb-next { right: 1.25rem; }
+    }
+
+    /* Viewport Stage for Zoom & Pan */
+    .lightbox-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4.5rem 1.25rem 6.5rem;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    .lightbox-img {
+      max-width: 92vw;
+      max-height: 74vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      transform-origin: center center;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: zoom-in;
+      will-change: transform;
+    }
+
+    .lightbox-img.is-zoomed {
+      cursor: grab;
+    }
+
+    .lightbox-img.is-dragging {
+      transition: none;
+      cursor: grabbing;
+    }
+
+    /* Bottom Caption Bar inside Lightbox */
+    .lightbox-caption-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.25rem 1.5rem 1.65rem;
+      background: linear-gradient(to top, rgba(20, 17, 18, 0.85) 35%, transparent);
+      text-align: center;
+      z-index: 205;
+      pointer-events: none;
+    }
+
+    .lightbox-caption-text {
+      max-width: 620px;
+      margin: 0 auto;
+      font-family: var(--font-sans);
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .lightbox-zoom-tip {
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.48);
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="is-time-locked">
+
+  <!-- ========================================================================
+       IST TIME-LOCK GATE (UNLOCKS AT 3:10 AM IST ON 23 NOV 2026)
+       ======================================================================== -->
+  <div class="timelock-screen" id="timelockScreen" role="dialog" aria-modal="true" aria-labelledby="timelockHeading">
+    <div class="bokeh-orb bokeh-orb-1" aria-hidden="true"></div>
+    <div class="bokeh-orb bokeh-orb-2" aria-hidden="true"></div>
+    <div class="bokeh-orb bokeh-orb-3" aria-hidden="true"></div>
+
+    <div class="timelock-card">
+      <div class="timelock-kicker">
+        <span class="ornament">✦</span>
+        <span>A Sealed Keepsake</span>
+        <span class="ornament">✦</span>
+      </div>
+
+      <h1 class="timelock-title" id="timelockHeading">
+        Some moments wait for the <em>right</em> hour...
+      </h1>
+
+      <p class="timelock-note">
+        This digital memory book is gently sealed until the exact moment it was meant to be opened.
+      </p>
+
+      <div class="countdown-grid" aria-live="polite">
+        <div class="countdown-box">
+          <span class="countdown-value" id="cdDays">00</span>
+          <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-value" id="cdHours">00</span>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-value" id="cdMinutes">00</span>
+          <span class="countdown-label">Mins</span>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-value" id="cdSeconds">00</span>
+          <span class="countdown-label">Secs</span>
+        </div>
+      </div>
+
+      <div class="timelock-target-badge">
+        <span class="dot-pulse" aria-hidden="true"></span>
+        <span>Unlocks on 23 Nov 2026 at 3:10 AM IST</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Scroll Progress Hairline -->
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+
+  <!-- ========================================================================
+       SECTION 1: OPENING SCREEN ("WELCOME TO OUR MEMORIES")
+       ======================================================================== -->
+  <header class="hero-section" id="top">
+    <!-- Ambient Bokeh Orbs -->
+    <div class="bokeh-orb bokeh-orb-1" aria-hidden="true"></div>
+    <div class="bokeh-orb bokeh-orb-2" aria-hidden="true"></div>
+    <div class="bokeh-orb bokeh-orb-3" aria-hidden="true"></div>
+
+    <!-- Floating Starlight Particles Container -->
+    <div class="particle-layer" id="heroParticles" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-kicker">
+        <span class="ornament">✦</span>
+        <span>A Digital Keepsake</span>
+        <span class="ornament">✦</span>
+      </div>
+
+      <h1 class="hero-title">
+        Some memories <em>never</em> really fade...
+      </h1>
+
+      <div class="hero-divider" aria-hidden="true"></div>
+
+      <p class="hero-subtitle">
+        Some moments become memories, some memories become stories, and some people leave little pieces of happiness in our lives.
+      </p>
+
+      <a href="#memory-journey" class="explore-btn" id="exploreBtn">
+        <span>Explore Our Memories</span>
+        <span class="arrow-icon" aria-hidden="true">↓</span>
+      </a>
+    </div>
+
+    <div class="hero-bottom-fade" aria-hidden="true"></div>
+  </header>
+
+  <!-- ========================================================================
+       SECTION 2: EDITORIAL MEMORY COLLECTION
+       ======================================================================== -->
+  <main class="story-section" id="memory-journey">
+    <div class="story-intro-marker">
+      <span>Chapter by chapter, frame by frame</span>
+      <div class="story-intro-line" aria-hidden="true"></div>
+    </div>
+
+    <!-- Photographs and captions are rendered dynamically with Set deduplication -->
+    <section class="memory-stream" id="memoryStream" aria-label="Memory Photo Story"></section>
+  </main>
+
+  <!-- ========================================================================
+       SECTION 3: FINAL CLOSING SECTION ("A BEAUTIFUL ENDING")
+       ======================================================================== -->
+  <footer class="closing-section" id="closingSection">
+    <div class="particle-layer" id="closingParticles" aria-hidden="true"></div>
+
+    <div class="closing-content" id="closingContent">
+      <div class="closing-ornament" aria-hidden="true">✦ · ♡ · ✦</div>
+
+      <h2 class="closing-headline">
+        And that’s a little collection of moments worth remembering.
+      </h2>
+
+      <p class="closing-body">
+        Time moves forward, but beautiful memories always find a way to stay with us.
+      </p>
+
+      <p class="closing-gratitude">
+        Thank you for being part of these memories.
+      </p>
+
+      <div class="closing-divider" aria-hidden="true"></div>
+
+      <p class="closing-signature">
+        Some memories are simply timeless. <span class="heart-pulse">♡</span>
+      </p>
+
+      <a href="#top" class="back-to-top" id="backToTopBtn">
+        <span>Back to the Beginning</span>
+        <span aria-hidden="true">↑</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       FULL-SCREEN FROSTED LIGHTBOX & ZOOM MODAL
+       ======================================================================== -->
+  <div
+    class="lightbox-overlay"
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Expanded Memory View"
+  >
+    <div class="lightbox-top-bar">
+      <div class="lightbox-counter" id="lbCounter">Memory 01 / 19</div>
+      <div class="lightbox-controls">
+        <button
+          type="button"
+          class="lb-icon-btn"
+          id="lbZoomBtn"
+          aria-label="Toggle Zoom"
+          title="Zoom In / Out"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="lb-icon-btn"
+          id="lbCloseBtn"
+          aria-label="Close Lightbox"
+          title="Close (Esc)"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="lb-nav-btn lb-prev"
+      id="lbPrevBtn"
+      aria-label="Previous Memory"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="lightbox-stage" id="lbStage">
+      <img src="" alt="" class="lightbox-img" id="lbImage" draggable="false" />
+    </div>
+
+    <button
+      type="button"
+      class="lb-nav-btn lb-next"
+      id="lbNextBtn"
+      aria-label="Next Memory"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="lightbox-caption-bar">
+      <p class="lightbox-caption-text" id="lbCaption"></p>
+      <p class="lightbox-zoom-tip" id="lbZoomTip">Double-tap or pinch to zoom · Tap outside to close</p>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       VANILLA JAVASCRIPT — STORY ENGINE, DEDUPLICATION, SCROLL REVEAL & LIGHTBOX
+       ======================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* ----------------------------------------------------------------------
+         0. IST TIME-LOCK GATE (3:10 AM ON 23 NOVEMBER 2026 IST / UTC+05:30)
+         ---------------------------------------------------------------------- */
+      const UNLOCK_TIMESTAMP_IST = new Date("2026-11-23T03:10:00+05:30").getTime();
+      const timelockScreen = document.getElementById("timelockScreen");
+      const cdDays = document.getElementById("cdDays");
+      const cdHours = document.getElementById("cdHours");
+      const cdMinutes = document.getElementById("cdMinutes");
+      const cdSeconds = document.getElementById("cdSeconds");
+      let timelockTimer = null;
+
+      function padTwo(val) {
+        return String(Math.max(0, val)).padStart(2, "0");
+      }
+
+      function unlockKeepsake() {
+        if (timelockTimer) {
+          clearInterval(timelockTimer);
+          timelockTimer = null;
+        }
+        document.body.classList.remove("is-time-locked");
+        if (timelockScreen) {
+          timelockScreen.classList.add("is-unlocked");
+          setTimeout(() => {
+            timelockScreen.style.display = "none";
+          }, 900);
+        }
+      }
+
+      function updateCountdown() {
+        const now = Date.now();
+        const diff = UNLOCK_TIMESTAMP_IST - now;
+
+        if (diff <= 0) {
+          unlockKeepsake();
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        if (cdDays) cdDays.textContent = padTwo(days);
+        if (cdHours) cdHours.textContent = padTwo(hours);
+        if (cdMinutes) cdMinutes.textContent = padTwo(minutes);
+        if (cdSeconds) cdSeconds.textContent = padTwo(seconds);
+      }
+
+      if (Date.now() >= UNLOCK_TIMESTAMP_IST) {
+        document.body.classList.remove("is-time-locked");
+        if (timelockScreen) timelockScreen.style.display = "none";
+      } else {
+        updateCountdown();
+        timelockTimer = setInterval(updateCountdown, 1000);
+      }
+
+      /* ----------------------------------------------------------------------
+         1. CURATED MEMORY DATASET (19 Raw GitHub URLs + 19 Unique Captions)
+         ---------------------------------------------------------------------- */
+      const RAW_MEMORIES = [
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2003.01.43.jpeg",
+          caption: "Some moments are small, but the quiet happiness they leave behind stays with us forever."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2003.00.41.jpeg",
+          caption: "Looking back, it is amazing how the simplest, most ordinary days slowly become our favorite chapters."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2003.00.41%20(2).jpeg",
+          caption: "Every photograph holds a gentle story that words can never quite finish telling."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2002.56.58.jpeg",
+          caption: "A paused second in time, kept safe so we can always remember how warm that day felt."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2002.55.56.jpeg",
+          caption: "There is a quiet magic in smiles that happen without anyone asking for them."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2002.55.23.jpeg",
+          caption: "Perhaps the sweetest part of a memory is knowing we can return to it whenever our hearts wish."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-22%20at%2002.55.22.jpeg",
+          caption: "Hours pass quickly, yet certain glances and soft laughter linger long after the day ends."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.57.jpeg",
+          caption: "A little reminder of how effortless joy feels when we are right where we belong."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.57%20(2).jpeg",
+          caption: "Some frames do not need a grand occasion—just genuine warmth and an unhurried afternoon."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.56%20(1).jpeg",
+          caption: "Captured softly, just as it happened—honest, unscripted, and full of heart."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.56.jpeg",
+          caption: "Even as seasons change, the light inside moments like this never loses its glow."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.55%20(1).jpeg",
+          caption: "Little fragments of time that quietly remind us what truly matters in life."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/WhatsApp%20Image%202026-11-21%20at%2020.20.54.jpeg",
+          caption: "A snapshot of calm, preserved like a pressed flower between the pages of a favorite book."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG-20250331-WA0010.jpg",
+          caption: "We rarely realize we are making a cherished memory until we find ourselves smiling at it later."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG-20250331-WA0012.jpg",
+          caption: "Some days leave behind a gentle afterglow that warms even the quietest evenings."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG_20231117_111657.jpg",
+          caption: "Looking at where we were reminds us how beautifully every step has brought us here."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG_20231117_111728.jpg",
+          caption: "Two moments side by side, proving that happiness often arrives in pairs."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG_20240606_145422.jpg",
+          caption: "Sunlight, stillness, and a feeling we wished could stretch just a little bit longer."
+        },
+        {
+          url: "https://raw.githubusercontent.com/sumitro7/cuitepie/main/IMG-20250213-WA0001.jpg",
+          caption: "One last page in this chapter, held close with gratitude for every smile along the way."
+        }
+      ];
+
+      /* ----------------------------------------------------------------------
+         2. SET-BASED URL DEDUPLICATION
+         Ensures identical source URLs never appear twice while keeping every
+         unique filename intact.
+         ---------------------------------------------------------------------- */
+      const seenUrls = new Set();
+      const memories = RAW_MEMORIES.filter((item) => {
+        const normalizedUrl = item.url.trim();
+        if (seenUrls.has(normalizedUrl)) {
+          return false;
+        }
+        seenUrls.add(normalizedUrl);
+        return true;
+      });
+
+      /* ----------------------------------------------------------------------
+         3. AMBIENT FLOATING STARLIGHT & BOKEH PARTICLES
+         ---------------------------------------------------------------------- */
+      function populateParticles(containerId, count) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const colors = [
+          "rgba(200, 169, 126, 0.72)",
+          "rgba(217, 167, 169, 0.68)",
+          "rgba(186, 174, 214, 0.72)",
+          "rgba(255, 255, 255, 0.9)"
+        ];
+
+        const fragment = document.createDocumentFragment();
+
+        for (let i = 0; i < count; i++) {
+          const particle = document.createElement("span");
+          const isSparkle = i % 3 === 0;
+          particle.className = `star-particle ${isSparkle ? "sparkle" : "dot"}`;
+
+          const left = Math.random() * 96 + 2;
+          const top = Math.random() * 92 + 4;
+          const duration = (Math.random() * 8 + 9).toFixed(1) + "s";
+          const delay = (Math.random() * 8).toFixed(1) + "s";
+          const size = isSparkle
+            ? Math.floor(Math.random() * 6 + 9) + "px"
+            : Math.floor(Math.random() * 4 + 3) + "px";
+          const color = colors[i % colors.length];
+          const maxOpacity = (Math.random() * 0.45 + 0.45).toFixed(2);
+
+          particle.style.left = `${left}%`;
+          particle.style.top = `${top}%`;
+          particle.style.setProperty("--dur", duration);
+          particle.style.setProperty("--delay", delay);
+          particle.style.setProperty("--size", size);
+          particle.style.setProperty("--color", color);
+          particle.style.setProperty("--max-opacity", maxOpacity);
+
+          fragment.appendChild(particle);
+        }
+
+        container.appendChild(fragment);
+      }
+
+      populateParticles("heroParticles", 24);
+      populateParticles("closingParticles", 20);
+
+      /* ----------------------------------------------------------------------
+         4. RENDER EDITORIAL MEMORY STREAM & DETECT NATURAL ASPECT RATIOS
+         ---------------------------------------------------------------------- */
+      const memoryStream = document.getElementById("memoryStream");
+
+      function formatMemoryNumber(num) {
+        return String(num).padStart(2, "0");
+      }
+
+      function applyOrientationClass(cardEl, naturalWidth, naturalHeight) {
+        if (!naturalWidth || !naturalHeight) return;
+        const ratio = naturalWidth / naturalHeight;
+        cardEl.classList.remove("is-portrait", "is-landscape", "is-square");
+
+        if (ratio < 0.88) {
+          cardEl.classList.add("is-portrait");
+        } else if (ratio > 1.15) {
+          cardEl.classList.add("is-landscape");
+        } else {
+          cardEl.classList.add("is-square");
+        }
+      }
+
+      function renderMemories() {
+        const fragment = document.createDocumentFragment();
+
+        memories.forEach((memory, index) => {
+          const alignment = index % 2 === 0 ? "align-left" : "align-right";
+          const chapterLabel = `Memory ${formatMemoryNumber(index + 1)}`;
+
+          const article = document.createElement("article");
+          article.className = `memory-entry ${alignment}`;
+          article.dataset.index = String(index);
+
+          const card = document.createElement("div");
+          card.className = "memory-card";
+
+          const frame = document.createElement("div");
+          frame.className = "photo-frame";
+          frame.setAttribute("role", "button");
+          frame.setAttribute("tabindex", "0");
+          frame.setAttribute("aria-label", `Open ${chapterLabel} in full screen`);
+
+          const inner = document.createElement("div");
+          inner.className = "photo-inner";
+
+          const img = document.createElement("img");
+          img.className = "memory-photo";
+          img.src = memory.url;
+          img.alt = `${chapterLabel} — ${memory.caption}`;
+          img.loading = index < 2 ? "eager" : "lazy";
+          img.decoding = "async";
+
+          // Subtle expand icon
+          const expandHint = document.createElement("div");
+          expandHint.className = "expand-hint";
+          expandHint.setAttribute("aria-hidden", "true");
+          expandHint.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          `;
+
+          // Handle natural dimension detection once loaded
+          const handleImageReady = () => {
+            inner.classList.add("loaded");
+            img.classList.add("img-ready");
+            applyOrientationClass(card, img.naturalWidth, img.naturalHeight);
+          };
+
+          if (img.complete && img.naturalWidth > 0) {
+            handleImageReady();
+          } else {
+            img.addEventListener("load", handleImageReady, { once: true });
+          }
+
+          // Graceful fallback if image fails to load (never show broken icon)
+          img.addEventListener(
+            "error",
+            () => {
+              inner.classList.add("loaded");
+              inner.innerHTML = `
+                <div class="photo-fallback">
+                  <span class="photo-fallback-icon">✦</span>
+                  <p class="photo-fallback-text">A quiet moment held in heart</p>
+                </div>
+              `;
+              frame.style.cursor = "default";
+            },
+            { once: true }
+          );
+
+          // Open Lightbox on click or Enter/Space key
+          const openThisMemory = () => {
+            if (img.naturalWidth > 0) {
+              openLightbox(index);
+            }
+          };
+
+          frame.addEventListener("click", openThisMemory);
+          frame.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openThisMemory();
+            }
+          });
+
+          inner.appendChild(img);
+          inner.appendChild(expandHint);
+          frame.appendChild(inner);
+
+          // Caption Directly Underneath Photograph
+          const captionBox = document.createElement("div");
+          captionBox.className = "memory-caption-box";
+          captionBox.innerHTML = `
+            <div class="memory-meta">
+              <span class="memory-index">${chapterLabel}</span>
+              <span class="memory-meta-line" aria-hidden="true"></span>
+            </div>
+            <p class="memory-message">${memory.caption}</p>
+          `;
+
+          card.appendChild(frame);
+          card.appendChild(captionBox);
+          article.appendChild(card);
+          fragment.appendChild(article);
+        });
+
+        memoryStream.appendChild(fragment);
+      }
+
+      renderMemories();
+
+      /* ----------------------------------------------------------------------
+         5. INTERSECTION OBSERVER FOR SCROLL-TRIGGERED REVEALS
+         ---------------------------------------------------------------------- */
+      function initScrollObserver() {
+        const entries = document.querySelectorAll(".memory-entry");
+        const closingContent = document.getElementById("closingContent");
+
+        if (!("IntersectionObserver" in window)) {
+          entries.forEach((el) => el.classList.add("is-visible"));
+          if (closingContent) closingContent.classList.add("is-visible");
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (observedItems, obs) => {
+            observedItems.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: "0px 0px -8% 0px",
+            threshold: 0.12
+          }
+        );
+
+        entries.forEach((entry) => observer.observe(entry));
+        if (closingContent) observer.observe(closingContent);
+      }
+
+      initScrollObserver();
+
+      /* ----------------------------------------------------------------------
+         6. SMOOTH SCROLL & READING PROGRESS BAR
+         ---------------------------------------------------------------------- */
+      const exploreBtn = document.getElementById("exploreBtn");
+      const memoryJourney = document.getElementById("memory-journey");
+      const backToTopBtn = document.getElementById("backToTopBtn");
+      const readingProgress = document.getElementById("readingProgress");
+
+      if (exploreBtn && memoryJourney) {
+        exploreBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          memoryJourney.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          const docHeight =
+            document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+          if (readingProgress) {
+            readingProgress.style.width = `${pct}%`;
+          }
+        },
+        { passive: true }
+      );
+
+      /* ----------------------------------------------------------------------
+         7. FULL-SCREEN LIGHTBOX WITH DOUBLE-TAP ZOOM, PAN & PINCH SUPPORT
+         ---------------------------------------------------------------------- */
+      const lightbox = document.getElementById("lightbox");
+      const lbStage = document.getElementById("lbStage");
+      const lbImage = document.getElementById("lbImage");
+      const lbCaption = document.getElementById("lbCaption");
+      const lbCounter = document.getElementById("lbCounter");
+      const lbCloseBtn = document.getElementById("lbCloseBtn");
+      const lbZoomBtn = document.getElementById("lbZoomBtn");
+      const lbPrevBtn = document.getElementById("lbPrevBtn");
+      const lbNextBtn = document.getElementById("lbNextBtn");
+
+      let currentIndex = 0;
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let lastTapTime = 0;
+      let initialPinchDistance = 0;
+      let initialPinchScale = 1;
+
+      function updateImageTransform() {
+        lbImage.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+        if (scale > 1.05) {
+          lbImage.classList.add("is-zoomed");
+        } else {
+          lbImage.classList.remove("is-zoomed");
+        }
+      }
+
+      function resetZoom() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        lbImage.classList.remove("is-zoomed", "is-dragging");
+        updateImageTransform();
+      }
+
+      function toggleZoom() {
+        if (scale > 1.05) {
+          resetZoom();
+        } else {
+          scale = 2.15;
+          translateX = 0;
+          translateY = 0;
+          updateImageTransform();
+        }
+      }
+
+      function showMemoryInLightbox(index) {
+        currentIndex = (index + memories.length) % memories.length;
+        const item = memories[currentIndex];
+        resetZoom();
+        lbImage.src = item.url;
+        lbImage.alt = `Memory ${formatMemoryNumber(currentIndex + 1)}`;
+        lbCaption.textContent = item.caption;
+        lbCounter.textContent = `Memory ${formatMemoryNumber(currentIndex + 1)} / ${formatMemoryNumber(memories.length)}`;
+      }
+
+      function openLightbox(index) {
+        showMemoryInLightbox(index);
+        lightbox.classList.add("is-open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("is-open");
+        document.body.style.overflow = "";
+        setTimeout(() => {
+          if (!lightbox.classList.contains("is-open")) {
+            resetZoom();
+          }
+        }, 300);
+      }
+
+      lbCloseBtn.addEventListener("click", closeLightbox);
+      lbZoomBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleZoom();
+      });
+
+      lbPrevBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showMemoryInLightbox(currentIndex - 1);
+      });
+
+      lbNextBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showMemoryInLightbox(currentIndex + 1);
+      });
+
+      // Click outside image closes lightbox
+      lbStage.addEventListener("click", (e) => {
+        if (e.target === lbStage) {
+          closeLightbox();
+        }
+      });
+
+      // Double-click zoom on desktop
+      lbImage.addEventListener("dblclick", (e) => {
+        e.stopPropagation();
+        toggleZoom();
+      });
+
+      // Mouse drag panning when zoomed
+      lbImage.addEventListener("mousedown", (e) => {
+        if (scale <= 1.05) return;
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        lbImage.classList.add("is-dragging");
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateImageTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        lbImage.classList.remove("is-dragging");
+      });
+
+      // Touch interactions: Double-tap zoom, single-finger pan when zoomed, two-finger pinch-to-zoom
+      function getTouchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.hypot(dx, dy);
+      }
+
+      lbImage.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.touches.length === 2) {
+            isDragging = false;
+            initialPinchDistance = getTouchDistance(e.touches);
+            initialPinchScale = scale;
+            lbImage.classList.add("is-dragging");
+            return;
+          }
+
+          if (e.touches.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 280) {
+              e.preventDefault();
+              toggleZoom();
+              lastTapTime = 0;
+              return;
+            }
+            lastTapTime = now;
+
+            if (scale > 1.05) {
+              isDragging = true;
+              startX = e.touches[0].clientX - translateX;
+              startY = e.touches[0].clientY - translateY;
+              lbImage.classList.add("is-dragging");
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      lbImage.addEventListener(
+        "touchmove",
+        (e) => {
+          if (e.touches.length === 2 && initialPinchDistance > 0) {
+            e.preventDefault();
+            const currentDist = getTouchDistance(e.touches);
+            const nextScale = Math.min(3.5, Math.max(1, initialPinchScale * (currentDist / initialPinchDistance)));
+            scale = nextScale;
+            if (scale <= 1.02) {
+              translateX = 0;
+              translateY = 0;
+            }
+            updateImageTransform();
+            return;
+          }
+
+          if (e.touches.length === 1 && isDragging && scale > 1.05) {
+            e.preventDefault();
+            translateX = e.touches[0].clientX - startX;
+            translateY = e.touches[0].clientY - startY;
+            updateImageTransform();
+          }
+        },
+        { passive: false }
+      );
+
+      lbImage.addEventListener("touchend", () => {
+        isDragging = false;
+        initialPinchDistance = 0;
+        lbImage.classList.remove("is-dragging");
+        if (scale < 1.05) {
+          resetZoom();
+        }
+      });
+
+      // Keyboard navigation (Escape, ArrowLeft, ArrowRight)
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("is-open")) return;
+        if (e.key === "Escape") {
+          closeLightbox();
+        } else if (e.key === "ArrowLeft") {
+          showMemoryInLightbox(currentIndex - 1);
+        } else if (e.key === "ArrowRight") {
+          showMemoryInLightbox(currentIndex + 1);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
